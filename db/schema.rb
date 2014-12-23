@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20141223094850) do
     t.integer  "rating"
     t.text     "comment"
     t.integer  "user_id"
+    t.integer  "movie_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

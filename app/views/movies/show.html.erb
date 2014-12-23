@@ -1,40 +1,77 @@
 <div class="panel panel-default">
   <div class="panel-body">
-    <div class="row col-md-4">
-      <%= link_to 'Edit', edit_movie_path(@movie), class: "btn btn-default" %> |
-      <%= link_to 'Back', movies_path, class: "btn btn-info" %>
-      <hr>
-      <%= image_tag @movie.image.url(:medium) %>
-      <div class="table-responsible">
-        <table class="table">
-          <tbody>
-            <tr>
-              <td><strong>Title:</strong></td>
-              <td><%= @movie.title %></td>
-            </tr>
-            <tr>
-              <td><strong>Description:</strong></td>
-              <td><%= @movie.description %></td>
-            </tr>
-            <tr>
-              <td><strong>Movie length:</strong></td>
-              <td><%= @movie.movie_length %></td>
-            </tr>
-            <tr>
-              <td><strong>Director:</strong></td>
-              <td><%= @movie.director %></td>
-            </tr>
-            <tr>
-              <td><strong>Rating:</strong></td>
-              <td><%= @movie.rating %></td>
-            </tr>
-            <tr>
-              <td><strong>User:</strong></td>
-              <td><%= @movie.user_id %></td>
-            </tr>
-          </tbody>
-        </table>
-      </div> <!-- /.table-responsible -->
-    </div> <!-- /.col-md-4 -->
+    <%= link_to 'Back', movies_path, class: "btn btn-info btn-sm" %> |
+    <%= link_to 'Edit', edit_movie_path(@movie), class: "btn btn-default btn-sm" %> |
+    <%= link_to 'New Review', new_movie_review_path(@movie), class: "btn btn-success btn-sm" %>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-4">
+        <%= image_tag @movie.image.url(:medium), size: "200x300" %>
+        <div class="star-rating" data-score=<%= @avg_review %>></div>
+        <em><%= "#{@movie.reviews.length} reviews" %></em>
+      </div> <!-- /.col-md-4 -->
+
+      <div class="col-md-6">
+        <div class="table-responsible">
+          <table class="table table-hover table-condensed">
+            <tbody>
+              <tr>
+                <td><strong>Title:</strong></td>
+                <td><%= @movie.title %></td>
+              </tr>
+              <tr>
+                <td><strong>Description:</strong></td>
+                <td><%= @movie.description %></td>
+              </tr>
+              <tr>
+                <td><strong>Movie length:</strong></td>
+                <td><%= @movie.movie_length %></td>
+              </tr>
+              <tr>
+                <td><strong>Director:</strong></td>
+                <td><%= @movie.director %></td>
+              </tr>
+              <tr>
+                <td><strong>Rating:</strong></td>
+                <td><%= @movie.rating %></td>
+              </tr>
+              <tr>
+                <td><strong>User:</strong></td>
+                <td><%= @movie.user_id %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div> <!-- /.table-responsible -->
+      </div> <!-- /.col-md-6 -->
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+      <h2>Reviews</h2>
+      <% if @movie.reviews.blank? %>
+        <h3>No reviews just yet, would you like to add the first!</h3>
+        <%= link_to 'Write Review', new_movie_review_path(@movie), class: "btn btn-danger btn-sm" %>
+      <% else %>
+        <% @movie.reviews.each do |review| %>
+          <div class="reviews">
+            <div class="star-rating" data-score=<%= review.rating %>> </div>
+            <p><%= review.comment %></p>
+            <p><%= link_to 'Edit', edit_movie_review_path(@movie.id, review), class: "btn btn-primary btn-xs" %></p>
+          </div>
+        <% end %>
+      <% end %>
+      </div>
+    </div>
   </div>
 </div>
+
+<script>
+  $('.star-rating').raty({
+    path: '/assets/',
+    readOnly: true,
+    score: function() {
+      return $(this).attr('data-score')
+    }
+  })
+</script>

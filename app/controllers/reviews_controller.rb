@@ -1,5 +1,6 @@
 class ReviewsController < ApplicationController
   before_action :set_review, only: [:show, :edit, :update, :destroy]
+  before_action :set_movie
   before_action :authenticate_user!
 
   respond_to :html
@@ -23,15 +24,18 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    # @review = Review.new(review_params)
-    @review = current_user.reviews.build(review_params)
+    @review = Review.new(review_params)
+    @review.user_id = current_user.id
+    @review.movie_id = @movie.id
     @review.save
-    respond_with(@review)
+    redirect_to @movie #movie_path(@movie.id)
+    # respond_with(@review)
   end
 
   def update
     @review.update(review_params)
-    respond_with(@review)
+    redirect_to movie_path(@movie)
+    # respond_with(@review)
   end
 
   def destroy
@@ -42,6 +46,10 @@ class ReviewsController < ApplicationController
   private
     def set_review
       @review = Review.find(params[:id])
+    end
+
+    def set_movie
+      @movie = Movie.find(params[:movie_id])
     end
 
     def review_params

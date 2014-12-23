@@ -27,8 +27,12 @@
     </div>
   </div>
 
-  <div class="actions">
-    <%= f.submit "Sign up" %>
+  <div class="row">
+    <div class="col-xs-6 col-sm-12 col-sm-offset-3 col-xs-offset-3">
+      <div class="btn-toolbar">
+        <%= submit_tag("Sign Up", {:class => 'btn btn-primary'}) %>
+      </div>
+    </div>
   </div>
 <% end %>
 
